@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/employee")
@@ -32,13 +33,9 @@ public class EmployeeController {
     }
 
    @GetMapping("/findById")
-   public ResponseEntity<Employee> getEmployee(@RequestParam int id) {
+   public ResponseEntity<?> getEmployee(@RequestParam int id) {
        Employee employee = employeeService.getEmployee(id);
-       if (employee != null) {
-           return ResponseEntity.ok(employee);
-       } else {
-           return ResponseEntity.notFound().build();
-       }
+       return ResponseEntity.ok(Objects.requireNonNullElse(employee, "User Not Available"));
    }
 
    @PutMapping("/updateEmployee/{id}")
@@ -66,10 +63,12 @@ public class EmployeeController {
        return ResponseEntity.ok(employeeList);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
+    @GetMapping("/{id}") public Employee getEmployee(@PathVariable Integer id) throws Exception {
         Employee employee = employeeService.getEmployee(id);
-        return ResponseEntity.ok(employee);
+        if (employee == null) {
+            throw new Exception("User not found");
+        }
+        return employee;
     }
 
 
