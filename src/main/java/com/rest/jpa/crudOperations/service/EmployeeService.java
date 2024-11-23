@@ -1,8 +1,9 @@
-package com.rest.jpa.curdOperations.service;
+package com.rest.jpa.crudOperations.service;
 
-import com.rest.jpa.curdOperations.entity.Employee;
-import com.rest.jpa.curdOperations.model.EmployeeRequest;
-import com.rest.jpa.curdOperations.repository.EmployeeRepository;
+import com.rest.jpa.crudOperations.config.AppConstants;
+import com.rest.jpa.crudOperations.entity.Employee;
+import com.rest.jpa.crudOperations.model.EmployeeRequest;
+import com.rest.jpa.crudOperations.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,6 @@ public class EmployeeService {
     }
 
 
-
     public String saveEmployee(EmployeeRequest employeeRequest) {
         Employee employee = new Employee();
         employee.setName(employeeRequest.getName());
@@ -32,7 +32,7 @@ public class EmployeeService {
 
 
    public Employee getEmployee(long id) {
-       return employeeRepository.findById(id).orElse(null);
+       return employeeRepository.findByIdAndStatus(id, AppConstants.ACTIVE_STATUS);
     }
 
 
@@ -67,8 +67,8 @@ public class EmployeeService {
            return "Employee not found";
        }
    }
-  public List<Employee> geAllEmployee(){
-        return employeeRepository.findAll();
+  public List<Employee> geAllEmployee() {
+        return employeeRepository.findByStatus(AppConstants.ACTIVE_STATUS);
   }
 
 }

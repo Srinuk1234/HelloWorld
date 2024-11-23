@@ -1,8 +1,8 @@
-package com.rest.jpa.curdOperations.controller;
+package com.rest.jpa.crudOperations.controller;
 
-import com.rest.jpa.curdOperations.entity.Employee;
-import com.rest.jpa.curdOperations.model.EmployeeRequest;
-import com.rest.jpa.curdOperations.service.EmployeeService;
+import com.rest.jpa.crudOperations.entity.Employee;
+import com.rest.jpa.crudOperations.model.EmployeeRequest;
+import com.rest.jpa.crudOperations.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employee")
 
-public class CurdOperationController {
+public class EmployeeController {
      @Autowired
     private EmployeeService employeeService;
 
-    public CurdOperationController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
     }
 
@@ -26,7 +26,7 @@ public class CurdOperationController {
         return "Up and Running Successfully";
     }
 
-    @PostMapping("/saveEmployees")
+    @PostMapping("/")
     public String saveEmployee(@RequestBody EmployeeRequest employeeRequest) {
         return employeeService.saveEmployee(employeeRequest);
     }
@@ -47,7 +47,7 @@ public class CurdOperationController {
     return new ResponseEntity<>(updateEmployee,HttpStatus.OK);
    }
 
-    @DeleteMapping("/DeleteEmp/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEmp(@PathVariable long id){
        String res = employeeService.deleteEmp(id);
         if (res.equals("Employee Delete Successfully")) {
@@ -64,6 +64,12 @@ public class CurdOperationController {
     public ResponseEntity<List<Employee>> geAllEmployee() {
         List<Employee> employeeList = employeeService.geAllEmployee();
        return ResponseEntity.ok(employeeList);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable Integer id) {
+        Employee employee = employeeService.getEmployee(id);
+        return ResponseEntity.ok(employee);
     }
 
 
